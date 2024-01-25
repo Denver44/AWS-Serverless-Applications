@@ -15,3 +15,27 @@ functions:
       - http:
           method: post
           path: notes
+  updateNote:
+    handler: handler.updateNote
+    events:
+      - http:
+          method: put
+          path: notes/{id}
+  deleteNote:
+    handler: handler.deleteNote
+    events:
+      - http:
+          method: delete
+          path: notes/{id}
+  getNote:
+    handler: handler.getNote
+    events:
+      - http:
+          method: get
+          path: notes/{id}
+  getAllNote:
+    handler: handler.getAllNote
+    events:
+      - http:
+          method: get
+          path: notes/

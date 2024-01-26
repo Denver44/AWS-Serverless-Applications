@@ -1,10 +1,9 @@
-service: notes-api
-frameworkVersion: '2'
+service: notes-api-v3 # Name of your serverless service
+frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: nodejs18.x
-  lambdaHashingVersion: 20201221
   stage: dev
   region: us-east-1
 

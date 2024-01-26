@@ -1,39 +1,121 @@
 'use strict';
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const documentClient = new DynamoDB.DocumentClient({ region: 'us-east-1' });
 
-module.exports.createNote = async (event) => {
+const NOTES_TABLE_NAME = process.env.NOTES_TABLE_NAME;
+
+const send = (statusCode, body) => {
   return {
-    statusCode: 200,
-    body: JSON.stringify('Note created successfully!'),
+    statusCode,
+    body: JSON.stringify(body),
   };
 };
 
-module.exports.updateNote = async (event) => {
-  const { id } = event.pathParameters;
-  return {
-    statusCode: 200,
-    body: JSON.stringify(`Note with id: ${id} updated successfully!`),
-  };
+module.exports.createNote = async (event, context, cb) => {
+  const data = JSON.parse(event.body);
+  try {
+    const params = {
+      TableName: NOTES_TABLE_NAME,
+      Item: {
+        notesId: data.id,
+        title: data.title,
+        body: data.body,
+      },
+      conditionExpression: 'attribute_not_exists(noteId)',
+    };
+    await documentClient.put(params).promise();
+    cb(null, send(201, data));
+  } catch (error) {
+    cb(
+      null,
+      send(500, JSON.stringify(error.message || 'Some error occurred!'))
+    );
+  }
 };
 
-module.exports.deleteNote = async (event) => {
-  const { id } = event.pathParameters;
-  return {
-    statusCode: 200,
-    body: JSON.stringify(`Note with id: ${id} deleted successfully!`),
-  };
+module.exports.updateNote = async (event, context, cb) => {
+  const notesId = event.pathParameters.id;
+  const data = JSON.parse(event.body);
+
+  try {
+    const params = {
+      TableName: NOTES_TABLE_NAME,
+      Key: { notesId },
+      UpdateExpression: 'set #title = :title, #body = :body',
+
+      ExpressionAttributeNames: {
+        '#title': 'title',
+        '#body': 'body',
+      },
+      ExpressionAttributeValues: {
+        ':title': data.title,
+        ':body': data.body,
+      },
+      conditionExpression: 'attribute_exists(notesId)',
+    };
+    await documentClient.update(params).promise();
+    cb(null, send(200, data));
+  } catch (error) {
+    cb(
+      null,
+      send(500, JSON.stringify(error.message || 'Some error occurred!'))
+    );
+  }
 };
 
-module.exports.getNote = async (event) => {
-  const { id } = event.pathParameters;
-  return {
-    statusCode: 200,
-    body: JSON.stringify(`Note with id: ${id} fetched successfully!`),
-  };
+module.exports.deleteNote = async (event, context, cb) => {
+  const notesId = event.pathParameters.id;
+
+  try {
+    const params = {
+      TableName: NOTES_TABLE_NAME,
+      Key: { notesId },
+      conditionExpression: 'attribute_exists(notesId)',
+    };
+    await documentClient.delete(params).promise();
+    cb(
+      null,
+      send(
+        200,
+        JSON.stringify(`Note with id: ${notesId} deleted successfully!`)
+      )
+    );
+  } catch (error) {
+    cb(
+      null,
+      send(500, JSON.stringify(error.message || 'Some error occurred!'))
+    );
+  }
 };
 
-module.exports.getAllNote = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify('All notes fetched successfully!'),
-  };
+module.exports.getNote = async (event, context, cb) => {
+  const notesId = event.pathParameters.id;
+  try {
+    const params = {
+      TableName: NOTES_TABLE_NAME,
+      Key: { notesId },
+    };
+    const data = await documentClient.get(params).promise();
+    cb(null, send(200, data));
+  } catch (error) {
+    cb(
+      null,
+      send(500, JSON.stringify(error.message || 'Some error occurred!'))
+    );
+  }
+};
+
+module.exports.getAllNote = async (event, context, cb) => {
+  try {
+    const params = {
+      TableName: NOTES_TABLE_NAME,
+    };
+    const data = await documentClient.scan(params).promise();
+    cb(null, send(200, data));
+  } catch (error) {
+    cb(
+      null,
+      send(500, JSON.stringify(error.message || 'Some error occurred!'))
+    );
+  }
 };

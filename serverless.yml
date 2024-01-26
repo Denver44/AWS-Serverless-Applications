@@ -13,6 +13,7 @@ functions:
     handler: handler.createNote
     environment:
       NOTES_TABLE_NAME: !Ref NotesTable # Get the physical name of the table resource, format: NotesTable
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1 # Enable connection reuse for AWS SDK for JavaScript
     iamRoleStatements: # IAM role statements for the Lambda function
       - Effect: Allow
         Action:
@@ -27,6 +28,7 @@ functions:
     handler: handler.updateNote
     environment:
       NOTES_TABLE_NAME: !Ref NotesTable
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -41,6 +43,7 @@ functions:
     handler: handler.deleteNote
     environment:
       NOTES_TABLE_NAME: !Ref NotesTable
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -55,6 +58,7 @@ functions:
     handler: handler.getNote
     environment:
       NOTES_TABLE_NAME: !Ref NotesTable
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -69,6 +73,7 @@ functions:
     handler: handler.getAllNote
     environment:
       NOTES_TABLE_NAME: !Ref NotesTable
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     iamRoleStatements:
       - Effect: Allow
         Action:

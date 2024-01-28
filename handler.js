@@ -110,7 +110,8 @@ module.exports.getNote = async (event, context, cb) => {
 
 module.exports.getAllNote = async (event, context, cb) => {
   context.callbackWaitsForEmptyEventLoop = false; // This is important for lambda to work properly
-
+  console.log('event', JSON.stringify(event));
+  console.log('context', JSON.stringify(context));
   try {
     const params = {
       TableName: NOTES_TABLE_NAME,

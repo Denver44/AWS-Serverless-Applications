@@ -1,0 +1,26 @@
+version: 0.2
+phases:
+  install:
+    on-failure: ABORT # if the install phase fails, the build is stopped
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing Serverless Framework...
+      - npm install -g serverless
+      - cd notes
+      - echo Installing dependencies...
+      - npm install
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Running Tests...
+      - npm test
+      - echo Packaging the service...
+      - serverless package --package my-artifacts --stage dev
+artifacts:
+  files:
+    - my-artifacts/*
+  name: MyProjectsArtifact
+cache:
+  paths:
+    - 'notes/node_modules/**/*'

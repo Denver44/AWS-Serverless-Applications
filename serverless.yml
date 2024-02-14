@@ -4,7 +4,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
-  stage: dev
+  stage: ${opt:stage, 'dev'} # Set the default stage to dev
   region: us-east-1
 
 functions:
@@ -91,7 +91,8 @@ functions:
           path: notes/
           authorizer:
             name: userpool_authorizer
-            arn: ${ssm:/notes/${self:provider.stage}/userPoolArn} # Get the user pool ID from the SSM parameter
+            type: COGNITO_USER_POOLS
+            arn: !GetAtt CognitoUserPool.Arn
 
 plugins:
   - serverless-iam-roles-per-function

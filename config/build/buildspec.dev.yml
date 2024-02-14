@@ -7,7 +7,6 @@ phases:
     commands:
       - echo Installing Serverless Framework...
       - npm install -g serverless
-      - cd notes
       - echo Installing dependencies...
       - npm install
   build:
@@ -23,4 +22,4 @@ artifacts:
   name: MyProjectsArtifact
 cache:
   paths:
-    - 'notes/node_modules/**/*'
+    - 'node_modules/**/*'

@@ -1,0 +1,32 @@
+name: Deploy notes-app-api
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  production-deploy:
+    name: production-deploy
+    runs-on: ubuntu-latest
+    environment: 
+      name: Production # Use the production environment
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3 # Checkout the code in the main branch
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci # Install the dependencies same as npm install
+      - name: Install Plugin and Deploy
+      uses: serverless/github-action@v3.2
+      with:
+        args: -c "serverless plugin install --name serverless-iam-roles-per-function && serverless deploy --stage production"
+        entrypoint: /bin/sh
+        env:
+          # Use the AWS credentials to deploy the service will use the IAM role with programmatic access and using GitHub secrets to store the credentials
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

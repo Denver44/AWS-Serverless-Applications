@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es5",
+    "outDir": ".build", // Here we can't override the outDir
+    "moduleResolution": "node",
+    "lib": ["es2015"],
+    "rootDir": "./" // Here we can't override the outDir
+  }
+}
+
+// This is not regular tsconfig.json file, it's optimized for the aws serverless framework

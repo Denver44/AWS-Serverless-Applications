@@ -1,15 +1,20 @@
 'use strict';
 
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  APIGatewayEvent,
+  Context,
+  APIGatewayProxyCallback,
+} from '@types/aws-lambda';
 
-const {
+import {
   DynamoDBDocumentClient,
   PutCommand,
   UpdateCommand,
   DeleteCommand,
   ScanCommand,
   GetCommand,
-} = require('@aws-sdk/lib-dynamodb');
+} from '@aws-sdk/lib-dynamodb';
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
@@ -22,7 +27,7 @@ const send = (statusCode, body) => {
   };
 };
 
-module.exports.createNote = async (event, context, cb) => {
+export const createNote = async (event, context, cb) => {
   context.callbackWaitsForEmptyEventLoop = false; // This is important for lambda to work properly
   const data = JSON.parse(event.body);
   try {
@@ -42,7 +47,7 @@ module.exports.createNote = async (event, context, cb) => {
   }
 };
 
-module.exports.updateNote = async (event, context, cb) => {
+export const updateNote = async (event, context, cb) => {
   context.callbackWaitsForEmptyEventLoop = false; // This is important for lambda to work properly
 
   const notesId = event.pathParameters.id;
@@ -71,7 +76,7 @@ module.exports.updateNote = async (event, context, cb) => {
   }
 };
 
-module.exports.deleteNote = async (event, context, cb) => {
+export const deleteNote = async (event, context, cb) => {
   context.callbackWaitsForEmptyEventLoop = false; // This is important for lambda to work properly
 
   const notesId = event.pathParameters.id;
@@ -92,7 +97,7 @@ module.exports.deleteNote = async (event, context, cb) => {
   }
 };
 
-module.exports.getNote = async (event, context, cb) => {
+export const getNote = async (event, context, cb) => {
   context.callbackWaitsForEmptyEventLoop = false; // This is important for lambda to work properly
 
   const notesId = event.pathParameters.id;
@@ -108,7 +113,7 @@ module.exports.getNote = async (event, context, cb) => {
   }
 };
 
-module.exports.getAllNote = async (event, context, cb) => {
+export const getAllNote = async (event, context, cb) => {
   context.callbackWaitsForEmptyEventLoop = false; // This is important for lambda to work properly
   console.log('event', JSON.stringify(event));
   console.log('context', JSON.stringify(context));

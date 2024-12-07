@@ -1,4 +1,4 @@
-const { CognitoJwtVerifier } = require('aws-jwt-verify');
+import { CognitoJwtVerifier } from 'aws-jwt-verify';
 const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID;
 const COGNITO_USER_POOL_WEB_CLIENT_ID =
   process.env.COGNITO_USER_POOL_WEB_CLIENT_ID;

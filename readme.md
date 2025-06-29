@@ -122,3 +122,8 @@ serverless remove
 ---
 
 **Note**: This is part of the "Complete Guide to Build Serverless Applications on AWS" course.
+
+# Serverless IAM Roles Per Function Plugin
+
+This plugin allows you to define IAM roles at the function level in your serverless.yml.
+https://www.serverless.com/plugins/serverless-iam-roles-per-function

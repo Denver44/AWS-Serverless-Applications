@@ -6,6 +6,11 @@ provider:
   runtime: nodejs20.x
   region: us-east-2
   stage: ${opt:stage, 'dev'}
+  environment:
+    NOTES_TABLE_NAME: !Ref NotesTable
+
+plugins:
+  - serverless-iam-roles-per-function
 
 functions:
   createNote:
@@ -14,34 +19,60 @@ functions:
       - http:
           method: post
           path: notes
-
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource:
+          - !GetAtt NotesTable.Arn
   updateNote:
     handler: handler.updateNote
     events:
       - http:
           method: put
           path: notes/{id}
-
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource:
+          - !GetAtt NotesTable.Arn
   deleteNote:
     handler: handler.deleteNote
     events:
       - http:
           method: delete
           path: notes/{id}
-
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource:
+          - !GetAtt NotesTable.Arn
   getAllNotes:
     handler: handler.getAllNotes
     events:
       - http:
           method: get
           path: notes
-
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+        Resource:
+          - !GetAtt NotesTable.Arn
   getNoteById:
     handler: handler.getNoteById
     events:
       - http:
           method: get
           path: notes/{id}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource:
+          - !GetAtt NotesTable.Arn
 
 resources:
   Resources:

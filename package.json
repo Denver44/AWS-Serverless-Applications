@@ -13,6 +13,9 @@
     "node ": "^18"
   },
   "devDependencies": {
-    "serverless": "3.38"
+    "@aws-sdk/client-dynamodb": "^3.839.0",
+    "@aws-sdk/lib-dynamodb": "^3.839.0",
+    "serverless": "3.38",
+    "serverless-iam-roles-per-function": "^3.2.0"
   }
 }

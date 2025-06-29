@@ -9,6 +9,7 @@ This application uses:
 - **AWS Lambda** - Serverless compute for API functions
 - **API Gateway** - REST API endpoints
 - **Serverless Framework** - Infrastructure as Code deployment
+- **DynamoDB** - NoSQL database for storing notes
 
 ## 📋 Prerequisites
 
@@ -83,9 +84,34 @@ notes-crud-api/
 
 ## 📝 API Endpoints
 
-| Method | Endpoint | Description   |
-| ------ | -------- | ------------- |
-| GET    | /hello   | Test endpoint |
+| Method | Endpoint    | Description                    |
+| ------ | ----------- | ------------------------------ |
+| GET    | /notes      | Get all notes (paginated scan) |
+| GET    | /notes/{id} | Get note by ID                 |
+| POST   | /notes      | Create a new note              |
+| PUT    | /notes/{id} | Update a note                  |
+| DELETE | /notes/{id} | Delete a note                  |
+
+### Get All Notes (Paginated Scan)
+
+The `GET /notes` endpoint retrieves all notes from DynamoDB. It uses a paginated scan to fetch all items, handling DynamoDB's 1MB scan limit by looping with the `LastEvaluatedKey` until all items are retrieved. For demonstration, the scan uses a limit of 2 items per request.
+
+**Example:**
+
+```bash
+curl https://your-api-gateway-url/dev/notes
+```
+
+**Response:**
+
+```json
+{
+  "items": [
+    { "notesId": "...", "title": "...", "body": "..." }
+    // ...more notes...
+  ]
+}
+```
 
 ## 🛠️ Development
 

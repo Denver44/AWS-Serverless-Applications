@@ -4,11 +4,41 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs20.x
+  region: us-east-2
+  stage: ${opt:stage, 'dev'}
 
 functions:
-  hello:
-    handler: handler.hello
+  createNote:
+    handler: handler.createNote
+    events:
+      - http:
+          method: post
+          path: notes
+
+  updateNote:
+    handler: handler.updateNote
+    events:
+      - http:
+          method: put
+          path: notes/{id}
+
+  deleteNote:
+    handler: handler.deleteNote
+    events:
+      - http:
+          method: delete
+          path: notes/{id}
+
+  getAllNotes:
+    handler: handler.getAllNotes
     events:
       - http:
           method: get
-          path: hello
+          path: notes
+
+  getNoteById:
+    handler: handler.getNoteById
+    events:
+      - http:
+          method: get
+          path: notes/{id}

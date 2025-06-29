@@ -1,17 +1,14 @@
-service: notes-api
-frameworkVersion: '2'
+service: notes-crud-api
+frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs18.x
-  lambdaHashingVersion: 20201221
-  stage: dev
-  region: us-east-1
+  runtime: nodejs20.x
 
 functions:
-  createNote:
-    handler: handler.createNote
+  hello:
+    handler: handler.hello
     events:
       - http:
-          method: post
-          path: notes
+          method: get
+          path: hello

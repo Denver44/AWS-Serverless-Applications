@@ -1,8 +1,14 @@
 'use strict';
 
-module.exports.createNote = async (event) => {
+module.exports.hello = async (event) => {
   return {
     statusCode: 200,
-    body: JSON.stringify('Note created successfully!'),
+    body: JSON.stringify(
+      {
+        message: 'Welcome to AWS Serverless Applications!',
+      },
+      null,
+      2
+    ),
   };
 };
